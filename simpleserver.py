@@ -11,16 +11,16 @@ import sys
 import math
  
 class HTTPRequestHandler(BaseHTTPRequestHandler):
-	def randomTaxiPositionJson(self, lat, lng):
+	def randomTaxiPositionJson(self, lat, lng, n):
 		taxis = []
 
-		radius = 1000
+		radius = 500
 		radiusInDegrees=float(radius)/float(111300)
 		r = radiusInDegrees
 		x0 = float(lat)
 		y0 = float(lng)
 
-		for i in range(1,100):
+		for i in range(1,n):
 			u = float(random.random())
 			v = float(random.random())
 			
@@ -34,7 +34,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 			xLat  = x + x0
 			yLong = y + y0
 
-			taxis.append({"lat": xLat , "lng": yLong})
+			taxis.append({"lat": xLat , "lng": yLong, "driver-name" : "Driver Test", "driver-car" : "Driver Car"})
 		return taxis
 	def do_GET(self):
 		try:
@@ -44,7 +44,21 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 				lat = query_components["lat"]
 				lng = query_components["lng"]
 
-				response = {"taxis": self.randomTaxiPositionJson(lat, lng)}
+				response = {"taxis": self.randomTaxiPositionJson(lat, lng, 100)}
+
+				self.send_response(200)
+				self.send_header('Content-Type', 'application/json')
+				self.end_headers()
+				self.wfile.write(json.dumps(response))
+
+			if None != re.search('/api/taxi-avarage-eta/*', self.path):
+				query = urlparse(self.path).query
+				query_components = dict(qc.split("=") for qc in query.split("&"))
+				lat = query_components["lat"]
+				lng = query_components["lng"]
+
+				response = {"taxis": self.randomTaxiPositionJson(lat, lng, 10),
+							"agarage-eta": 5}
 
 				self.send_response(200)
 				self.send_header('Content-Type', 'application/json')
