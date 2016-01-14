@@ -51,7 +51,7 @@ class HTTPRequestHandler(BaseHTTPRequestHandler):
 				self.end_headers()
 				self.wfile.write(json.dumps(response))
 
-			if None != re.search('/api/taxi-avarage-eta/*', self.path):
+			elif None != re.search('/api/taxi-avarage-eta/*', self.path):
 				query = urlparse(self.path).query
 				query_components = dict(qc.split("=") for qc in query.split("&"))
 				lat = query_components["lat"]
