@@ -19,9 +19,7 @@ GET /api/taxi-position/the-taxi
 ```
 Parameter | Type | Description
 ---|---|---
-`session` | **int** | *Any given number just to make the session
-control. If you want a constant taxi position just provide the same
-number in all your requests*
+`session` | **int** | *Any given number just to make the session control. If you want a constant taxi position just provide the same number in all your requests*
 
 ```shel
 GET /api/gettaxis
